@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVRUPA YAKASI — Complete Master Project Dashboard</title>
+    <style>
+        :root {
+            --bg-main: #0a0f1d;
+            --bg-card: #131a30;
+            --bg-card-hover: #1b2443;
+            --border-color: #1c2541;
+            --border-highlight: #2a3764;
+            --text-main: #f0f4f8;
+            --text-muted: #8d99ae;
+            --accent-teal: #00f5d4;
+            --accent-blue: #00b4d8;
+            --accent-purple: #9b5de5;
+            --accent-orange: #f77f00;
+            --accent-red: #ff4d6d;
+            --success-bg: rgba(0, 245, 212, 0.1);
+            --active-bg: rgba(247, 127, 0, 0.1);
+            --pending-bg: rgba(141, 153, 174, 0.1);
+            --glow-teal: 0 0 20px rgba(0, 245, 212, 0.4);
+            --glow-blue: 0 0 20px rgba(0, 180, 216, 0.4);
+            --glow-purple: 0 0 20px rgba(155, 93, 229, 0.4);
+            --glow-red: 0 0 15px rgba(255, 77, 109, 0.6);
+            --font-stack: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-stack);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(155, 93, 229, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(0, 245, 212, 0.08) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .project-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-teal);
+            font-weight: 700;
+        }
+
+        .project-badge svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-teal) 50%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 245, 212, 0.2);
+        }
+
+        .client-info {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.2rem;
+        }
+
+        .client-info span {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .timeline-pill {
+            background: rgba(155, 93, 229, 0.15);
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-dev-portal {
+            background: rgba(19, 26, 48, 0.8);
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: var(--glow-purple);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-dev-portal:hover {
+            background: var(--accent-purple);
+            color: #ffffff;
+            box-shadow: 0 0 25px rgba(155, 93, 229, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .btn-dev-portal svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* ADMIN SETUP PANEL */
+        .admin-setup-panel {
+            background: linear-gradient(145deg, #182039 0%, #11172b 100%);
+            border: 2px solid var(--accent-blue);
+            border-radius: 16px;
+            padding: 1.8rem;
+            box-shadow: var(--glow-blue);
+            display: none;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+        }
+
+        .admin-header h3 {
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.3rem;
+        }
+
+        .admin-header h3 svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--accent-blue);
+        }
+
+        .btn-exit-admin {
+            background: rgba(255, 77, 109, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-exit-admin:hover {
+            background: var(--accent-red);
+            color: #fff;
+            box-shadow: var(--glow-red);
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+            background: var(--bg-main);
+            border: 1px solid var(--border-highlight);
+            color: var(--text-main);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 10px rgba(0, 180, 216, 0.3);
+        }
+
+        .admin-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.2rem;
+        }
+
+        .btn-sync-cloud {
+            background: var(--accent-teal);
+            color: var(--bg-main);
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: var(--glow-teal);
+            transition: all 0.3s ease;
+        }
+
+        .btn-sync-cloud:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 245, 212, 0.8);
+        }
+
+        .btn-sync-cloud svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* OVERVIEW GRID */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+        .card-progress::before {
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+        }
+
+        .card-active-sprint::before {
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-red));
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--text-muted);
+        }
+
+        /* RADIAL CHART */
+        .progress-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-circle-bg {
+            fill: none;
+            stroke: var(--border-highlight);
+            stroke-width: 12;
+        }
+
+        .progress-circle-val {
+            fill: none;
+            stroke: var(--accent-teal);
+            stroke-width: 12;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 8px rgba(0, 245, 212, 0.6));
+        }
+
+        .chart-center {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .chart-center .percent {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: var(--accent-teal);
+            line-height: 1;
+        }
+
+        .chart-center .label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.3rem;
+        }
+
+        .progress-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-completed { background-color: var(--accent-teal); box-shadow: 0 0 10px var(--accent-teal); }
+        .dot-active { background-color: var(--accent-orange); box-shadow: 0 0 10px var(--accent-orange); }
+        .dot-pending { background-color: var(--text-muted); }
+
+        .stat-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-val { font-size: 1.3rem; font-weight: 700; color: var(--text-main); }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+
+        /* ACTIVE SPRINT CARD */
+        .pulse-light {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 77, 109, 0.15);
+            border: 1px solid var(--accent-red);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-red);
+            letter-spacing: 1px;
+            box-shadow: var(--glow-red);
+            animation: pulseWarning 2s infinite;
+        }
+
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-red);
+        }
+
+        @keyframes pulseWarning {
+            0% { opacity: 1; box-shadow: 0 0 15px rgba(255, 77, 109, 0.6); }
+            50% { opacity: 0.7; box-shadow: 0 0 5px rgba(255, 77, 109, 0.2); }
+            100% { opacity: 1; box-shadow: 0 0 15px rgba(255, 77, 109, 0.6); }
+        }
+
+        .active-sprint-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.2rem;
+            padding: 1rem 0;
+        }
+
+        .active-task-phase {
+            color: var(--accent-blue);
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .active-task-title {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .active-task-desc {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .active-task-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border-top: 1px solid var(--border-highlight);
+            padding-top: 1.2rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .meta-item svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--accent-orange);
+        }
+
+        /* MILESTONE TIMELINE */
+        .milestone-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-header h2 svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--accent-blue);
+        }
+
+        .timeline-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            position: relative;
+        }
+
+        @media (max-width: 992px) {
+            .timeline-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        .phase-card {
+            background: var(--bg-main);
+            border: 1px solid var(--border-highlight);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .phase-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .phase-card.phase-complete {
+            border-color: var(--accent-teal);
+            box-shadow: 0 0 15px rgba(0, 245, 212, 0.2);
+        }
+
+        .phase-card.phase-active {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 15px rgba(247, 127, 0, 0.2);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phase-badge-num {
+            background: var(--border-highlight);
+            color: var(--text-main);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .phase-complete .phase-badge-num {
+            background: var(--accent-teal);
+            color: var(--bg-main);
+        }
+
+        .phase-active .phase-badge-num {
+            background: var(--accent-orange);
+            color: var(--bg-main);
+        }
+
+        .phase-percent {
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .phase-complete .phase-percent { color: var(--accent-teal); }
+        .phase-active .phase-percent { color: var(--accent-orange); }
+        .phase-pending .phase-percent { color: var(--text-muted); }
+
+        .phase-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.3;
+            flex: 1;
+        }
+
+        .phase-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .phase-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        .phase-complete .phase-progress-fill { background: var(--accent-teal); box-shadow: 0 0 8px var(--accent-teal); }
+        .phase-active .phase-progress-fill { background: var(--accent-orange); box-shadow: 0 0 8px var(--accent-orange); }
+
+        /* INTERACTIVE MASTER CHECKLIST REPORT */
+        .checklist-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .checklist-section-title {
+            padding: 2rem 2rem 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #161e38;
+        }
+
+        .checklist-section-title h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .checklist-section-title h2 svg {
+            width: 26px;
+            height: 26px;
+            fill: var(--accent-teal);
+        }
+
+        .checklist-tabs {
+            display: flex;
+            background-color: var(--bg-main);
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1.2rem 1.8rem;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-teal);
+            border-bottom-color: var(--accent-teal);
+            background-color: var(--bg-card);
+        }
+
+        .tab-badge {
+            background: var(--border-highlight);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+
+        .tab-btn.active .tab-badge {
+            background: rgba(0, 245, 212, 0.15);
+            color: var(--accent-teal);
+        }
+
+        .checklist-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .report-phase-banner {
+            background: linear-gradient(90deg, #1d274c, transparent);
+            color: var(--accent-blue);
+            padding: 0.8rem 1.4rem;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 1.5rem 0 0.2rem 0;
+            border-left: 4px solid var(--accent-blue);
+            text-transform: uppercase;
+        }
+
+        .report-phase-banner:first-child {
+            margin-top: 0;
+        }
+
+        .report-phase-banner svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--accent-blue);
+        }
+
+        .task-row {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-highlight);
+            border-radius: 12px;
+            padding: 1.4rem 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .task-row:hover {
+            border-color: var(--accent-blue);
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+
+        .task-row.completed {
+            border-left: 4px solid var(--accent-teal);
+        }
+
+        .task-row.active {
+            border-left: 4px solid var(--accent-orange);
+            background: linear-gradient(90deg, rgba(247, 127, 0, 0.05) 0%, transparent 100%);
+        }
+
+        .task-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            flex: 1;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .task-id-badge {
+            background: var(--border-highlight);
+            color: var(--accent-blue);
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+
+        .task-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .task-meta-tags {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .meta-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .meta-pill svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--text-muted);
+        }
+
+        .task-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* STATUS BADGES & DROPDOWNS */
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .badge-completed {
+            background-color: var(--success-bg);
+            color: var(--accent-teal);
+            border: 1px solid var(--accent-teal);
+            box-shadow: 0 0 10px rgba(0, 245, 212, 0.2);
+        }
+
+        .badge-active {
+            background-color: var(--active-bg);
+            color: var(--accent-orange);
+            border: 1px solid var(--accent-orange);
+            box-shadow: 0 0 10px rgba(247, 127, 0, 0.2);
+            animation: pulseActive 2s infinite;
+        }
+
+        @keyframes pulseActive {
+            0% { box-shadow: 0 0 5px rgba(247, 127, 0, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(247, 127, 0, 0.6); }
+            100% { box-shadow: 0 0 5px rgba(247, 127, 0, 0.3); }
+        }
+
+        .badge-pending {
+            background-color: var(--pending-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--text-muted);
+        }
+
+        /* DEVELOPER SELECT DROPDOWN */
+        .select-status {
+            background-color: #182039;
+            color: var(--text-main);
+            border: 2px solid var(--accent-blue);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 180, 216, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .select-status:focus {
+            border-color: var(--accent-teal);
+            box-shadow: var(--glow-teal);
+        }
+
+        .select-status option {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            padding: 10px;
+        }
+
+        .select-status.status-completed { color: var(--accent-teal); border-color: var(--accent-teal); }
+        .select-status.status-active { color: var(--accent-orange); border-color: var(--accent-orange); }
+        .select-status.status-pending { color: var(--text-muted); border-color: var(--text-muted); }
+
+        /* PASSWORD MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 15, 29, 0.85);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-card {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-purple);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(155, 93, 229, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .modal-header svg {
+            width: 36px;
+            height: 36px;
+            fill: var(--accent-purple);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .modal-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .modal-input {
+            background: var(--bg-main);
+            border: 2px solid var(--border-highlight);
+            padding: 1rem;
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .modal-input:focus {
+            border-color: var(--accent-teal);
+            box-shadow: var(--glow-teal);
+        }
+
+        .modal-error {
+            color: var(--accent-red);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-modal-cancel {
+            background: var(--border-highlight);
+            color: var(--text-main);
+        }
+
+        .btn-modal-cancel:hover {
+            background: var(--border-color);
+        }
+
+        .btn-modal-confirm {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: var(--glow-purple);
+        }
+
+        .btn-modal-confirm:hover {
+            background: #ab72f5;
+            box-shadow: 0 0 25px rgba(155, 93, 229, 0.8);
+        }
+
+        /* FLOATING DOCK */
+        .floating-dock {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(19, 26, 48, 0.9);
+            border: 1px solid var(--border-highlight);
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            display: none;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 500;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dock-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dock-status-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .dock-synced {
+            border-color: var(--accent-teal);
+            box-shadow: var(--glow-teal);
+        }
+        .dock-synced .dock-indicator { background-color: var(--accent-teal); box-shadow: 0 0 8px var(--accent-teal); }
+
+        .dock-syncing {
+            border-color: var(--accent-orange);
+            box-shadow: var(--glow-orange);
+        }
+        .dock-syncing .dock-indicator { background-color: var(--accent-orange); box-shadow: 0 0 8px var(--accent-orange); animation: blink 1s infinite; }
+
+        .dock-error {
+            border-color: var(--accent-red);
+            box-shadow: var(--glow-red);
+        }
+        .dock-error .dock-indicator { background-color: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background-color: var(--bg-card);
+        }
+
+        footer span {
+            color: var(--accent-teal);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- HEADER -->
+        <header>
+            <div class="header-left">
+                <div class="project-badge">
+                    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM12 4.15 18.63 8 12 11.85 5.37 8 12 4.15zM4.77 9.61 11 13.46v7.38l-6.23-3.56A.25.25 0 0 1 4.5 17v-7.14a.25.25 0 0 1 .27-.25zM13 20.84v-7.38l6.23-3.85a.25.25 0 0 1 .27.25V17a.25.25 0 0 1-.13.22L13 20.84z"/></svg>
+                    AVRUPA YAKASI (LAN EDITION)
+                </div>
+                <h1>Master Roadmap & Progress Dashboard</h1>
+                <div class="client-info">
+                    Unity 6.4 Multiplayer Engine | Client: <span style="color: var(--accent-teal); font-weight: 800;">mr_royal1925</span> | Execution Timeline: <span class="timeline-pill">6 Weeks Master Sprint</span>
+                </div>
+            </div>
+
+            <button class="btn-dev-portal" id="btnDevPortal" onclick="openAuthModal()">
+                <svg viewBox="0 0 24 24"><path d="M18 10v-4c0-3.31-2.69-6-6-6S6 3.69 6 7v3c-1.66 0-3 1.34-3 3v8c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3v-8c0-1.66-1.34-3-3-3zm-10-3c0-2.21 1.79-4 4-4s4 1.79 4 4v3H8V7zm10 12c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-8c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v8zm-5-3c.83 0 1.5-.67 1.5-1.5S13.83 12 13 12s-1.5.67-1.5 1.5S12.17 16 13 16z"/></svg>
+                Developer Portal
+            </button>
+        </header>
+
+        <!-- ADMIN SETUP PANEL (Hidden in Client View) -->
+        <div class="admin-setup-panel" id="adminSetupPanel">
+            <div class="admin-header">
+                <h3>
+                    <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+                    Self-Modifying Git HTML Engine (Cloud Sync Setup)
+                </h3>
+                <button class="btn-exit-admin" onclick="exitAdminMode()">Exit Admin Mode</button>
+            </div>
+            <div class="admin-grid">
+                <div class="input-group">
+                    <label for="ghOwner">GitHub Username / Organization</label>
+                    <input type="text" id="ghOwner" placeholder="e.g. your-username">
+                </div>
+                <div class="input-group">
+                    <label for="ghRepo">Repository Name</label>
+                    <input type="text" id="ghRepo" placeholder="e.g. avrupa-yakasi">
+                </div>
+                <div class="input-group">
+                    <label for="ghFilePath">HTML File Path in Repo</label>
+                    <input type="text" id="ghFilePath" placeholder="e.g. roadmap_dashboard.html">
+                </div>
+                <div class="input-group">
+                    <label for="ghToken">Personal Access Token (PAT)</label>
+                    <input type="password" id="ghToken" placeholder="ghp_................................">
+                </div>
+            </div>
+            <div class="admin-actions">
+                <button class="btn-sync-cloud" onclick="manualSync()">
+                    <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                    Commit HTML Updates to GitHub
+                </button>
+            </div>
+        </div>
+
+        <!-- OVERVIEW GRID -->
+        <div class="overview-grid">
+            
+            <!-- CIRCULAR PROGRESS CHART -->
+            <div class="card card-progress">
+                <div class="card-title">
+                    <span>Overall Project Progress</span>
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                </div>
+                <div class="progress-content">
+                    <div class="chart-wrapper">
+                        <svg class="progress-svg" viewBox="0 0 180 180">
+                            <circle class="progress-circle-bg" cx="90" cy="90" r="75"></circle>
+                            <circle class="progress-circle-val" id="progressCircleVal" cx="90" cy="90" r="75" stroke-dasharray="471" stroke-dashoffset="471"></circle>
+                        </svg>
+                        <div class="chart-center">
+                            <span class="percent" id="progressPercentText">0%</span>
+                            <span class="label">Completed</span>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <div class="stat-dot dot-completed"></div>
+                            <div class="stat-details">
+                                <span class="stat-val" id="statCompleted">0</span>
+                                <span class="stat-label">Completed Tasks</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-dot dot-active"></div>
+                            <div class="stat-details">
+                                <span class="stat-val" id="statActive">0</span>
+                                <span class="stat-label">Active Sprints</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-dot dot-pending"></div>
+                            <div class="stat-details">
+                                <span class="stat-val" id="statPending">0</span>
+                                <span class="stat-label">Scheduled Tasks</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTIVE SPRINT FOCUS CARD -->
+            <div class="card card-active-sprint">
+                <div class="card-title">
+                    <span>Active Sprint Focus</span>
+                    <div class="pulse-light">
+                        <div class="pulse-dot"></div>
+                        ACTIVE SPRINT
+                    </div>
+                </div>
+                <div class="active-sprint-content">
+                    <div class="active-task-phase" id="activeTaskPhase">Detecting Phase...</div>
+                    <div class="active-task-title" id="activeTaskTitle">Loading Active Focus...</div>
+                    <div class="active-task-desc" id="activeTaskDesc">Please wait while the AVRUPA YAKASI match matrix is processed.</div>
+                </div>
+                <div class="active-task-meta">
+                    <div class="meta-item">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        Target Execution: Local / LAN
+                    </div>
+                    <div class="meta-item">
+                        <svg viewBox="0 0 24 24"><path d="M19 15v4H5v-4h14m1-2H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zM7 18.5c-.82 0-1.5-.67-1.5-1.5s.68-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM19 5v4H5V5h14m1-2H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zM7 8.5c-.82 0-1.5-.67-1.5-1.5S6.18 5 7 5s1.5.68 1.5 1.5S7.83 8.5 7 8.5z"/></svg>
+                        Mirror Networking Engine
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MILESTONE TIMELINE -->
+        <div class="milestone-section">
+            <div class="section-header">
+                <h2>
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>
+                    Milestone & Roadmap Timeline
+                </h2>
+            </div>
+            <div class="timeline-container" id="timelineContainer">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+
+        <!-- INTERACTIVE MASTER CHECKLIST REPORT -->
+        <div class="checklist-section" id="checklistReportSection">
+            <div class="checklist-section-title">
+                <h2>
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    Interactive Checklist Verification Report
+                </h2>
+                <span class="timeline-pill">Master Verification Matrix</span>
+            </div>
+            <div class="checklist-tabs" id="checklistTabs">
+                <!-- Dynamically populated by JS -->
+            </div>
+            <div class="checklist-content" id="checklistContent">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PASSWORD MODAL -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                <span class="modal-title">Developer Passkey</span>
+            </div>
+            <p class="modal-desc">Enter your administrative password to enable real-time HTML Git committing and live task editing.</p>
+            <input type="password" class="modal-input" id="authInput" placeholder="••••••••" onkeydown="if(event.key === 'Enter') verifyAuth()">
+            <div class="modal-error" id="authError">Incorrect passkey. Access denied.</div>
+            <div class="modal-buttons">
+                <button class="btn-modal btn-modal-cancel" onclick="closeAuthModal()">Cancel</button>
+                <button class="btn-modal btn-modal-confirm" onclick="verifyAuth()">Unlock Admin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING STATUS DOCK -->
+    <div class="floating-dock dock-synced" id="floatingDock">
+        <div class="dock-indicator"></div>
+        <span class="dock-status-text" id="dockStatusText">● Local Database Ready</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        AVRUPA YAKASI Standalone Master Tracker | Client: <span style="color:var(--accent-teal);">mr_royal1925</span> | CORS HTML Git Database Architecture
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ==========================================
+        // CONFIG & DEVELOPER STATE
+        // ==========================================
+        const DEV_PASSKEY = "avrupa777";
+        let isDevMode = false;
+        let htmlRepoSha = null;
+
+        // Auto-detect config from URL if applicable
+        const currentHostname = window.location.hostname;
+        const currentPath = window.location.pathname;
+        let defaultOwner = "";
+        let defaultRepo = "";
+        let defaultFilePath = "roadmap_dashboard.html";
+
+        if (currentHostname.includes("github.io")) {
+            defaultOwner = currentHostname.split(".")[0];
+            const paths = currentPath.split("/").filter(p => p.length > 0);
+            if (paths.length > 0) {
+                defaultRepo = paths[0];
+            }
+        }
+        
+        const filenameInUrl = currentPath.split("/").pop();
+        if (filenameInUrl && filenameInUrl.endsWith(".html")) {
+            defaultFilePath = filenameInUrl;
+        }
+
+        // ==========================================
+        // SINGLE-FILE TASK DATABASE (NO JSON REQUIRED)
+        // ==========================================
+        // --- START TASK MATRIX DATABASE ---
+        window.TASK_MATRIX = [
+          {
+            "id": "FND-1",
+            "phase": "Core Foundation",
+            "title": "Mirror LAN Infrastructure",
+            "desc": "Master networking lifecycle established supporting 1 Host and up to 3 connected Clients over local network with automatic IP binding.",
+            "status": "completed",
+            "week": "Previous"
+          },
+          {
+            "id": "FND-2",
+            "phase": "Core Foundation",
+            "title": "Structured Lobby System",
+            "desc": "Real-time multi-client player list indexing (Player 1 to Player 4), host-authoritative start buttons, and clean disconnect handling.",
+            "status": "completed",
+            "week": "Previous"
+          },
+          {
+            "id": "FND-3",
+            "phase": "Core Foundation",
+            "title": "Server-Authoritative Character Select",
+            "desc": "Grid-based selection locking ensuring no duplicate character selections, fully synchronized character avatars, and Client ready state tracking.",
+            "status": "completed",
+            "week": "Previous"
+          },
+          {
+            "id": "FND-4",
+            "phase": "Core Foundation",
+            "title": "10-Question Core Match Loop",
+            "desc": "Dynamic question loading from QuestionDatabase, fully synchronized visual round countdown timers (10s), server-side answer evaluation, and speed-based scoring tier logic (400 / 300 / 200 / 100 pts).",
+            "status": "completed",
+            "week": "Previous"
+          },
+          {
+            "id": "FND-5",
+            "phase": "Core Foundation",
+            "title": "Final Ranking & Result System",
+            "desc": "End-of-match score sorting, Winner highlight banner display, structured 'Play Again' room reset, and strict decoupling of UI logic from Networking architecture.",
+            "status": "completed",
+            "week": "Previous"
+          },
+          {
+            "id": "UI-1",
+            "phase": "Phase 1: UI Polish",
+            "title": "Smooth Scene & Round Transitions",
+            "desc": "Build polished canvas group fade and slide transitions between Lobby, Character Select, Gameplay, and Result scenes. Add inter-round question number celebration banners.",
+            "status": "completed",
+            "week": "Week 1"
+          },
+          {
+            "id": "UI-2",
+            "phase": "Phase 1: UI Polish",
+            "title": "3-Second Dramatic Suspense Reveal",
+            "desc": "When the 10-second answer timer expires, introduce a server-synchronized 3-second suspense pause where answers are locked before the correct answer button is revealed.",
+            "status": "active",
+            "week": "Week 1"
+          },
+          {
+            "id": "UI-3",
+            "phase": "Phase 1: UI Polish",
+            "title": "Dynamic Zoom & Scaling Highlights",
+            "desc": "Add pop-in and glowing zoom animations (Vector3.Scale) to the correct answer button upon reveal to create an immediate visual anchor.",
+            "status": "active",
+            "week": "Week 2"
+          },
+          {
+            "id": "UI-4",
+            "phase": "Phase 1: UI Polish",
+            "title": "Juicy Floating Score & Character Card Feedback",
+            "desc": "Instantiate floating TextMeshPro point callouts (+400!, +300!) above player UI cards upon answering correctly. Add an animated shake/bounce effect to player cards when their score updates.",
+            "status": "pending",
+            "week": "Week 2"
+          },
+          {
+            "id": "UI-5",
+            "phase": "Phase 1: UI Polish",
+            "title": "Typography, Alignment & Visual Hierarchy Pass",
+            "desc": "Audit all custom UI text containers to ensure professional margins, standardized Segoe UI / TextMeshPro font rendering, and flawless contrast against the dark slate containers.",
+            "status": "pending",
+            "week": "Week 2"
+          },
+          {
+            "id": "SAB-1",
+            "phase": "Phase 2: Sabotage Engine",
+            "title": "Sabotage Manager Architecture",
+            "desc": "Build a server-authoritative SabotageManager script. Enable penalty usage strictly after Question 1. Enforce match rules allowing exactly one penalty assignment per player per round, supporting multi-target selections.",
+            "status": "pending",
+            "week": "Week 3"
+          },
+          {
+            "id": "SAB-2",
+            "phase": "Phase 2: Sabotage Engine",
+            "title": "❄️ Ice Effect Overlay Mechanic",
+            "desc": "Create an interactive frost/ice screen overlay that locks answer button interaction. Implement a multi-tap / click listener requiring the victim to rapidly tap the screen 5 times to shatter the ice.",
+            "status": "pending",
+            "week": "Week 3"
+          },
+          {
+            "id": "SAB-3",
+            "phase": "Phase 2: Sabotage Engine",
+            "title": "🧪 Slime Effect Overlay Mechanic",
+            "desc": "Build a viscous, green screen-obscuring slime overlay graphic. Program an intuitive swipe / drag pointer event listener that requires the player to wipe back and forth across the screen to clear the goop.",
+            "status": "pending",
+            "week": "Week 4"
+          },
+          {
+            "id": "SAB-4",
+            "phase": "Phase 2: Sabotage Engine",
+            "title": "🐀 Rodent Effect Mechanic",
+            "desc": "Develop a mischievous rat sprite animation that runs across the active questionText container, randomly stealing and hiding 20-30% of the text characters to confuse opponents.",
+            "status": "pending",
+            "week": "Week 4"
+          },
+          {
+            "id": "SAB-5",
+            "phase": "Phase 2: Sabotage Engine",
+            "title": "Mirror Network State Synchronization",
+            "desc": "Wire up Mirror [Command] and [ClientRpc] calls to instantly broadcast sabotage triggers, synchronize victim debuff overlays, and update clearance progress states across all LAN clients with near-zero latency.",
+            "status": "pending",
+            "week": "Week 4"
+          },
+          {
+            "id": "AUD-1",
+            "phase": "Phase 3: Audio Suite",
+            "title": "Cinematic Intro MP4 Video Setup",
+            "desc": "Configure a Unity VideoPlayer component on an introductory canvas to play a high-fidelity MP4 cinematic splash video, including an elegant 'Tap to Skip' overlay.",
+            "status": "pending",
+            "week": "Week 5"
+          },
+          {
+            "id": "AUD-2",
+            "phase": "Phase 3: Audio Suite",
+            "title": "Looping Party Background Music",
+            "desc": "Implement a seamless, upbeat, high-energy party music track that loops dynamically during active rooms and matches.",
+            "status": "pending",
+            "week": "Week 5"
+          },
+          {
+            "id": "AUD-3",
+            "phase": "Phase 3: Audio Suite",
+            "title": "Interactive SFX Suite",
+            "desc": "Program precise audio triggers for countdown ticks, suspense drumrolls, correct chime, wrong buzzer hits, and satisfying UI button clicks.",
+            "status": "pending",
+            "week": "Week 5"
+          },
+          {
+            "id": "AUD-4",
+            "phase": "Phase 3: Audio Suite",
+            "title": "Character Voiceover Integration",
+            "desc": "Import and wire up custom character voice clips. Trigger unique voice lines during Character Select confirmation, Attacked reaction (when sabotaged), and Win screen celebration.",
+            "status": "pending",
+            "week": "Week 5"
+          },
+          {
+            "id": "AUD-5",
+            "phase": "Phase 3: Audio Suite",
+            "title": "Audio Mixer Frequency Balancing",
+            "desc": "Setup a master AudioMixer with dedicated sub-groups for Master, Music, SFX, and Voice. Add ducking triggers to lower music volume slightly when character voices or major sabotage SFX play.",
+            "status": "pending",
+            "week": "Week 5"
+          },
+          {
+            "id": "OPT-1",
+            "phase": "Phase 4: Final Handover",
+            "title": "4-Device Physical LAN Stress Testing",
+            "desc": "Conduct multi-hour live testing sessions using 4 discrete physical Windows/Mac/Android machines connected to the same active LAN router to verify packet synchronization.",
+            "status": "pending",
+            "week": "Week 6"
+          },
+          {
+            "id": "OPT-2",
+            "phase": "Phase 4: Final Handover",
+            "title": "Edge Case & Disconnect Stability",
+            "desc": "Forcefully disconnect Host and Client devices mid-question to ensure graceful error handling, room recovery, and clean session state resets without client freezing.",
+            "status": "pending",
+            "week": "Week 6"
+          },
+          {
+            "id": "OPT-3",
+            "phase": "Phase 4: Final Handover",
+            "title": "Performance Polish & Draw Call Batching",
+            "desc": "Profile the game with Unity Profiler. Group UI canvas elements, pack 2D character artwork and sabotage assets into consolidated Sprite Atlases to keep draw calls below 50.",
+            "status": "pending",
+            "week": "Week 6"
+          },
+          {
+            "id": "OPT-4",
+            "phase": "Phase 4: Final Handover",
+            "title": "Handover Export & Technical Briefing Pack",
+            "desc": "Finalize exact developer code comments, create automated standalone build exports for Windows/Mac/Linux, and record a concise video/Loom walkthrough explaining the network architecture.",
+            "status": "pending",
+            "week": "Week 6"
+          }
+        ];
+        // --- END TASK MATRIX DATABASE ---
+
+        let activeTabPhase = "All Sprints (Master Report)";
+
+        // ==========================================
+        // DOM INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initLocalStorageConfig();
+            fetchSelfHtmlSha();
+            renderDashboard();
+        });
+
+        function initLocalStorageConfig() {
+            const savedOwner = localStorage.getItem('gh_owner') || defaultOwner;
+            const savedRepo = localStorage.getItem('gh_repo') || defaultRepo;
+            const savedFilePath = localStorage.getItem('gh_filePath') || defaultFilePath;
+            const savedToken = localStorage.getItem('gh_token') || "";
+
+            document.getElementById('ghOwner').value = savedOwner;
+            document.getElementById('ghRepo').value = savedRepo;
+            document.getElementById('ghFilePath').value = savedFilePath;
+            document.getElementById('ghToken').value = savedToken;
+        }
+
+        // ==========================================
+        // SELF-MODIFYING GITHUB HTML SYNC ENGINE
+        // ==========================================
+        async function fetchSelfHtmlSha() {
+            try {
+                const owner = document.getElementById('ghOwner').value.trim();
+                const repo = document.getElementById('ghRepo').value.trim();
+                const filePath = document.getElementById('ghFilePath').value.trim();
+                const token = document.getElementById('ghToken').value.trim();
+
+                if (owner && repo && filePath && token) {
+                    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        htmlRepoSha = data.sha;
+                        updateDockStatus('● Linked to GitHub HTML Repository', 'dock-synced');
+                    }
+                }
+            } catch (err) {
+                console.warn("Could not fetch repo HTML SHA, running local standalone mode.");
+            }
+        }
+
+        let syncDebounceTimer = null;
+        function onTaskStatusChanged(taskId, newStatus) {
+            const task = window.TASK_MATRIX.find(t => t.id === taskId);
+            if (task) {
+                task.status = newStatus;
+                renderDashboard();
+
+                if (isDevMode) {
+                    updateDockStatus('Syncing changes to Git HTML...', 'dock-syncing');
+                    clearTimeout(syncDebounceTimer);
+                    syncDebounceTimer = setTimeout(() => {
+                        commitSelfHtmlToGitHub();
+                    }, 2000);
+                }
+            }
+        }
+
+        async function manualSync() {
+            updateDockStatus('Syncing changes to Git HTML...', 'dock-syncing');
+            await commitSelfHtmlToGitHub();
+        }
+
+        async function commitSelfHtmlToGitHub() {
+            const owner = document.getElementById('ghOwner').value.trim();
+            const repo = document.getElementById('ghRepo').value.trim();
+            const filePath = document.getElementById('ghFilePath').value.trim();
+            const token = document.getElementById('ghToken').value.trim();
+
+            if (!owner || !repo || !filePath || !token) {
+                alert("Please provide GitHub Username, Repository, HTML File Path, and Personal Access Token in the Setup panel to commit HTML changes.");
+                updateDockStatus('● Sync Failed - Missing Setup Info', 'dock-error');
+                return;
+            }
+
+            localStorage.setItem('gh_owner', owner);
+            localStorage.setItem('gh_repo', repo);
+            localStorage.setItem('gh_filePath', filePath);
+            localStorage.setItem('gh_token', token);
+
+            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+
+            try {
+                // Step 1: Fetch clean pristine source code from GitHub to prevent DOM injection corruption
+                const getResp = await fetch(apiUrl, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (!getResp.ok) {
+                    throw new Error(`GitHub API returned status ${getResp.status}. Please check your exact file path.`);
+                }
+
+                const getData = await getResp.json();
+                htmlRepoSha = getData.sha;
+                const pristineSource = decodeURIComponent(escape(atob(getData.content)));
+
+                // Step 2: Inject updated JSON database array into the pristine HTML source string
+                const startMarker = "// --- START TASK MATRIX DATABASE ---";
+                const endMarker = "// --- END TASK MATRIX DATABASE ---";
+
+                const startIdx = pristineSource.indexOf(startMarker);
+                const endIdx = pristineSource.indexOf(endMarker);
+
+                if (startIdx === -1 || endIdx === -1) {
+                    throw new Error("Database serialization markers missing from remote HTML source.");
+                }
+
+                const newJsonString = `window.TASK_MATRIX = ${JSON.stringify(window.TASK_MATRIX, null, 10)};`;
+                const updatedSource = pristineSource.substring(0, startIdx + startMarker.length) +
+                                      "\n        " + newJsonString + "\n        " +
+                                      pristineSource.substring(endIdx);
+
+                // Step 3: Support Unicode safe Base64 formatting
+                const base64UpdatedContent = btoa(unescape(encodeURIComponent(updatedSource)));
+
+                // Step 4: Perform PUT commit to overwrite the remote HTML file
+                const putResp = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: "Auto-commit single-file HTML Task Matrix update via Admin Portal",
+                        content: base64UpdatedContent,
+                        sha: htmlRepoSha
+                    })
+                });
+
+                if (putResp.ok) {
+                    const putData = await putResp.json();
+                    htmlRepoSha = putData.content.sha;
+                    updateDockStatus('● Single-file Git HTML successfully synced', 'dock-synced');
+                } else {
+                    const errorData = await putResp.json();
+                    throw new Error(errorData.message || 'Failed to execute PUT commit.');
+                }
+            } catch (err) {
+                console.error("Self-Modifying GitHub Commit Error:", err);
+                updateDockStatus('● Sync Error: ' + err.message, 'dock-error');
+                alert(`GitHub Commit Error: ${err.message}\nMake sure your token has 'repo' permissions and your repo/filepath is accurate.`);
+            }
+        }
+
+        function updateDockStatus(text, className) {
+            const dock = document.getElementById('floatingDock');
+            const textSpan = document.getElementById('dockStatusText');
+            
+            dock.className = `floating-dock ${className}`;
+            textSpan.textContent = text;
+        }
+
+        // ==========================================
+        // UI RENDERING LOGIC
+        // ==========================================
+        function renderDashboard() {
+            renderOverviewStats();
+            renderMilestoneTimeline();
+            renderChecklistTabs();
+            renderChecklistContent();
+        }
+
+        function renderOverviewStats() {
+            const total = window.TASK_MATRIX.length;
+            const completed = window.TASK_MATRIX.filter(t => t.status === 'completed').length;
+            const active = window.TASK_MATRIX.filter(t => t.status === 'active').length;
+            const pending = window.TASK_MATRIX.filter(t => t.status === 'pending').length;
+
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+            const circleVal = document.getElementById('progressCircleVal');
+            const radius = circleVal.getAttribute('r');
+            const circumference = 2 * Math.PI * radius;
+            const dashoffset = circumference - (percentage / 100) * circumference;
+
+            circleVal.style.strokeDasharray = `${circumference}`;
+            circleVal.style.strokeDashoffset = `${dashoffset}`;
+            document.getElementById('progressPercentText').textContent = `${percentage}%`;
+
+            document.getElementById('statCompleted').textContent = completed;
+            document.getElementById('statActive').textContent = active;
+            document.getElementById('statPending').textContent = pending;
+
+            let focusTask = window.TASK_MATRIX.find(t => t.status === 'active');
+            if (!focusTask) {
+                focusTask = window.TASK_MATRIX.find(t => t.status === 'pending');
+            }
+            if (!focusTask) {
+                focusTask = window.TASK_MATRIX[window.TASK_MATRIX.length - 1];
+            }
+
+            if (focusTask) {
+                document.getElementById('activeTaskPhase').textContent = `${focusTask.phase} — ${focusTask.week || 'Active Focus'}`;
+                document.getElementById('activeTaskTitle').textContent = focusTask.title;
+                document.getElementById('activeTaskDesc').textContent = focusTask.desc;
+            }
+        }
+
+        function renderMilestoneTimeline() {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = "";
+
+            const phases = [...new Set(window.TASK_MATRIX.map(t => t.phase))];
+
+            phases.forEach((phaseName, index) => {
+                const phaseTasks = window.TASK_MATRIX.filter(t => t.phase === phaseName);
+                const completedTasks = phaseTasks.filter(t => t.status === 'completed').length;
+                const activeTasks = phaseTasks.filter(t => t.status === 'active').length;
+                const percent = phaseTasks.length > 0 ? Math.round((completedTasks / phaseTasks.length) * 100) : 0;
+
+                let stateClass = 'phase-pending';
+                if (percent === 100) stateClass = 'phase-complete';
+                else if (activeTasks > 0 || completedTasks > 0) stateClass = 'phase-active';
+
+                const card = document.createElement('div');
+                card.className = `phase-card ${stateClass}`;
+                card.innerHTML = `
+                    <div class="phase-header">
+                        <span class="phase-badge-num">PHASE ${index}</span>
+                        <span class="phase-percent">${percent}%</span>
+                    </div>
+                    <div class="phase-title">${phaseName}</div>
+                    <div class="phase-progress-bar">
+                        <div class="phase-progress-fill" style="width: ${percent}%"></div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderChecklistTabs() {
+            const container = document.getElementById('checklistTabs');
+            container.innerHTML = "";
+
+            const phases = [...new Set(window.TASK_MATRIX.map(t => t.phase))];
+
+            // 1. Add Master Report tab first
+            const masterBtn = document.createElement('button');
+            const totalCompleted = window.TASK_MATRIX.filter(t => t.status === 'completed').length;
+            masterBtn.className = `tab-btn ${"All Sprints (Master Report)" === activeTabPhase ? 'active' : ''}`;
+            masterBtn.innerHTML = `
+                <span>All Sprints (Master Report)</span>
+                <span class="tab-badge" style="background:var(--accent-teal); color:#000;">${totalCompleted}/${window.TASK_MATRIX.length}</span>
+            `;
+            masterBtn.onclick = () => {
+                activeTabPhase = "All Sprints (Master Report)";
+                renderChecklistTabs();
+                renderChecklistContent();
+            };
+            container.appendChild(masterBtn);
+
+            // 2. Add individual phase tabs
+            phases.forEach(phaseName => {
+                const phaseTasks = window.TASK_MATRIX.filter(t => t.phase === phaseName);
+                const completed = phaseTasks.filter(t => t.status === 'completed').length;
+
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${phaseName === activeTabPhase ? 'active' : ''}`;
+                btn.innerHTML = `
+                    <span>${phaseName}</span>
+                    <span class="tab-badge">${completed}/${phaseTasks.length}</span>
+                `;
+                btn.onclick = () => {
+                    activeTabPhase = phaseName;
+                    renderChecklistTabs();
+                    renderChecklistContent();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function renderChecklistContent() {
+            const container = document.getElementById('checklistContent');
+            container.innerHTML = "";
+
+            let tasksToRender = [];
+            if (activeTabPhase === "All Sprints (Master Report)") {
+                tasksToRender = window.TASK_MATRIX;
+            } else {
+                tasksToRender = window.TASK_MATRIX.filter(t => t.phase === activeTabPhase);
+            }
+
+            if (tasksToRender.length === 0) {
+                container.innerHTML = `<div class="task-row"><div class="task-info"><span class="task-title">No sub-tasks listed for this milestone.</span></div></div>`;
+                return;
+            }
+
+            let currentPhaseBanner = "";
+
+            tasksToRender.forEach(task => {
+                if (activeTabPhase === "All Sprints (Master Report)" && task.phase !== currentPhaseBanner) {
+                    currentPhaseBanner = task.phase;
+                    const banner = document.createElement('div');
+                    banner.className = "report-phase-banner";
+                    banner.innerHTML = `
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                        <span>${currentPhaseBanner} Milestone Sprints</span>
+                    `;
+                    container.appendChild(banner);
+                }
+
+                const row = document.createElement('div');
+                row.className = `task-row ${task.status}`;
+
+                let statusHtml = "";
+
+                if (isDevMode) {
+                    statusHtml = `
+                        <select class="select-status status-${task.status}" onchange="onTaskStatusChanged('${task.id}', this.value)">
+                            <option value="completed" ${task.status === 'completed' ? 'selected' : ''}>Completed</option>
+                            <option value="active" ${task.status === 'active' ? 'selected' : ''}>Active Focus</option>
+                            <option value="pending" ${task.status === 'pending' ? 'selected' : ''}>Scheduled</option>
+                        </select>
+                    `;
+                } else {
+                    let badgeLabel = "Scheduled";
+                    if (task.status === 'completed') badgeLabel = "Completed";
+                    else if (task.status === 'active') badgeLabel = "In Progress";
+
+                    statusHtml = `<span class="badge-status badge-${task.status}">${badgeLabel}</span>`;
+                }
+
+                row.innerHTML = `
+                    <div class="task-info">
+                        <div class="task-header">
+                            <span class="task-id-badge">${task.id}</span>
+                            <span class="task-title">${task.title}</span>
+                            <div class="task-meta-tags">
+                                <span class="meta-pill">
+                                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>
+                                    ${task.week || 'Scheduled'}
+                                </span>
+                            </div>
+                        </div>
+                        <p class="task-desc">${task.desc}</p>
+                    </div>
+                    <div class="task-status-container">
+                        ${statusHtml}
+                    </div>
+                `;
+
+                container.appendChild(row);
+            });
+        }
+
+        // ==========================================
+        // PASSWORD & AUTH LOGIC
+        // ==========================================
+        function openAuthModal() {
+            if (isDevMode) {
+                document.getElementById('adminSetupPanel').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            document.getElementById('authInput').value = "";
+            document.getElementById('authError').style.display = "none";
+            document.getElementById('authModal').style.display = "flex";
+            document.getElementById('authInput').focus();
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = "none";
+        }
+
+        function verifyAuth() {
+            const inputVal = document.getElementById('authInput').value;
+            if (inputVal === DEV_PASSKEY) {
+                closeAuthModal();
+                enableAdminMode();
+            } else {
+                document.getElementById('authError').style.display = "block";
+            }
+        }
+
+        function enableAdminMode() {
+            isDevMode = true;
+            
+            document.getElementById('adminSetupPanel').style.display = "block";
+            document.getElementById('floatingDock').style.display = "flex";
+            document.getElementById('btnDevPortal').innerHTML = `
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                Developer Portal Unlocked
+            `;
+            document.getElementById('btnDevPortal').style.background = "var(--accent-purple)";
+            document.getElementById('btnDevPortal').style.color = "#ffffff";
+
+            renderDashboard();
+            document.getElementById('adminSetupPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function exitAdminMode() {
+            isDevMode = false;
+            
+            document.getElementById('adminSetupPanel').style.display = "none";
+            document.getElementById('floatingDock').style.display = "none";
+            document.getElementById('btnDevPortal').innerHTML = `
+                <svg viewBox="0 0 24 24"><path d="M18 10v-4c0-3.31-2.69-6-6-6S6 3.69 6 7v3c-1.66 0-3 1.34-3 3v8c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3v-8c0-1.66-1.34-3-3-3zm-10-3c0-2.21 1.79-4 4-4s4 1.79 4 4v3H8V7zm10 12c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-8c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v8zm-5-3c.83 0 1.5-.67 1.5-1.5S13.83 12 13 12s-1.5.67-1.5 1.5S12.17 16 13 16z"/></svg>
+                Developer Portal
+            `;
+            document.getElementById('btnDevPortal').style.background = "rgba(19, 26, 48, 0.8)";
+            document.getElementById('btnDevPortal').style.color = "var(--accent-purple)";
+
+            renderDashboard();
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0cc3a65de15a07c',t:'MTc4MTYzODIxNg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
