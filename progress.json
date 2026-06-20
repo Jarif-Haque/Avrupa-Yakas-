@@ -46,14 +46,14 @@
         "phase": 2,
         "title": "Interactive Level 1 Construction",
         "desc": "Building a realistic 4-room house layout (Kitchen, Living Room, Bedroom, Bathroom).",
-        "status": "completed"
+        "status": "pending"
     },
     {
         "id": "2.2",
         "phase": 2,
         "title": "Wall Cleaning & Sponge Scrubbing System",
         "desc": "Enabling physical sponge wipes to erase grimy stains and mold from walls in real-time.",
-        "status": "active"
+        "status": "pending"
     },
     {
         "id": "2.3",
